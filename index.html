@@ -1,0 +1,49 @@
+<!DOCTYPE html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Kayıp Ada'nın Hazinesi</title>
+<style>
+:root{box-sizing:border-box;--bg:#14100c;--card:#231b12;--fg:#f1e6d0;--ac:#e0a64a;--red:#d9534f;--ok:#6fbf73;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--fg);font-family:Georgia,"Times New Roman",serif}
+#w{max-width:560px;margin:0 auto;padding:14px;display:flex;flex-direction:column;min-height:100vh;box-sizing:border-box}
+#top{display:flex;justify-content:space-between;font-size:16px;margin-bottom:10px}
+#card{background:var(--card);border:2px solid #3a2b18;border-radius:14px;padding:18px;flex:1;animation:f .5s}
+@keyframes f{from{opacity:0;transform:translateY(8px)}to{opacity:1}}
+#em{font-size:64px;text-align:center}
+h1{margin:6px 0 10px;text-align:center;color:var(--ac);font-size:26px}
+#nt{color:var(--ac);font-style:italic;margin:8px 0}
+p{line-height:1.55;font-size:17px;margin:8px 0}
+button{display:block;width:100%;margin:10px 0 0;padding:14px;font:17px Georgia,serif;color:var(--fg);background:#34261a;border:2px solid var(--ac);border-radius:12px;cursor:pointer;text-align:left}
+button:active{background:#4a361f}
+.good{border-color:var(--ok)}.bad{border-color:var(--red)}
+#ft{text-align:center;font-size:12px;opacity:.6;margin-top:10px}
+</style><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#14100c"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"></head><body><div id="w"><div id="top"></div><div id="card"></div><div id="ft">© 2026 Yapımcı Adı. Tüm hakları saklıdır. Özgün hikaye ve kod.</div></div>
+<script>
+const IC={fener:'🔦 Fener',halat:'🪢 Halat',erzak:'🍞 Erzak',sopa:'🪵 Sopa'};
+const SC={
+start:{e:'⚓',t:'Liman kasabasında, babandan kalan yırtık bir harita buldun: "Kayıp Ada\'nın Hazinesi". Gemin hazır. Yola çıkmadan önce yanına tek bir şey alabilirsin.',c:[{t:'🔦 Fener al',to:'firtina',give:'fener'},{t:'🪢 Halat al',to:'firtina',give:'halat'},{t:'🍞 Erzak al',to:'firtina',give:'erzak'}]},
+firtina:{e:'⛈️',t:'Açık denizde korkunç bir fırtına koptu! Dalgalar güverteyi yalıyor, yelkenler çıldırmış gibi çırpınıyor.',c:[{t:'Yelkenleri indir',to:'kiyi',note:'Gemi sarsıldı ama dayandı.'},{t:'Tam yol devam et!',to:'kiyi',hp:-1,note:'Dev bir dalga seni savurdu! (-1 can)'}]},
+kiyi:{e:'🏝️',t:'Adaya sağ salim ulaştın! Kumsalda sağlam bir sopa buldun. İki yol var: sık orman patikası ya da kayalık sahil.',c:[{t:'Sopayı al, ormana gir',to:'yilan',give:'sopa'},{t:'Kayalık sahilden yürü',to:'korsan'}]},
+yilan:{e:'🐍',t:'Patikada kocaman bir yılan yolunu kesti. Tıslıyor ve kıvrılıyor!',c:[{t:'Sopayla yılanı kov',to:'magara',req:'sopa',note:'Yılan çalılığa kaçtı.'},{t:'Halatla yılanı bağla',to:'magara',req:'halat',note:'Yılanı usulca bağlayıp geçtin.'},{t:'Koşarak geç',to:'magara',hp:-1,note:'Yılan seni ısırdı! (-1 can)'}]},
+korsan:{e:'🏴‍☠️',t:'Kayalıkta korsanlar kamp kurmuş. Seni fark ettiler ve kılıçlarını çekti!',c:[{t:'Erzağı onlara ver',to:'magara',req:'erzak',note:'Korsanlar yemeğe saldırdı, sen sıvıştın.'},{t:'Fenerle ışık oyunu yap',to:'magara',req:'fener',note:'Korsanlar ışıktan korkup dağıldı.'},{t:'Dövüşerek geç',to:'magara',hp:-2,note:'Zor kurtuldun. (-2 can)'}]},
+magara:{e:'🕳️',t:'Haritadaki mağaraya vardın. İçerisi zifiri karanlık ve kanat sesleri geliyor.',c:[{t:'Feneri yak',to:'kopru',req:'fener',note:'Yarasalar ışıktan kaçtı.'},{t:'Karanlıkta ilerle',to:'kopru',hp:-1,note:'Yarasalar saldırdı! (-1 can)'}]},
+kopru:{e:'🌉',t:'Uçurumun üzerinde çürümüş bir ip köprü sallanıyor. Aşağısı görünmüyor.',c:[{t:'Halatla köprüyü sağlamlaştır',to:'bilmece',req:'halat',note:'Köprü artık sağlam.'},{t:'Erzakla güç toplayıp dolan',to:'bilmece',req:'erzak',note:'Uzun yoldan, ama güvenle geçtin.'},{t:'Dikkatle yürü',to:'bilmece',hp:-1,note:'Bir tahta kırıldı, tutunup çıktın. (-1 can)'}]},
+bilmece:{e:'🗿',t:'Taş bir kapı konuşuyor: "Ne kadar çok alırsan, o kadar çok bırakırsın. Nedir?"',sh:1,c:[{t:'Adım',to:'tuzak',note:'Kapı gürleyerek açıldı!'},{t:'Altın',to:'tuzak',hp:-1,note:'Kapı sarsıldı, taşlar düştü! (-1 can)'},{t:'Gölge',to:'tuzak',hp:-1,note:'Kapı sarsıldı, taşlar düştü! (-1 can)'}]},
+tuzak:{e:'☠️',t:'Zemin renkli karolarla kaplı. Duvarda yazıyor: "Yaşamın rengi yolu açar." Yanlış karo ok fırlatıyor.',sh:1,c:[{t:'Kırmızı karo',to:'bekci',hp:-1,note:'Oklar fışkırdı! (-1 can)'},{t:'Yeşil karo',to:'bekci',note:'Karolar sessizce geçit verdi.'},{t:'Mavi karo',to:'bekci',hp:-1,note:'Oklar fışkırdı! (-1 can)'}]},
+bekci:{e:'🗿',t:'Hazine odasının girişinde taş bir bekçi uyanıyor. Gözleri kırmızı parlıyor!',c:[{t:'Sopayla savaş',to:'hazine',req:'sopa',hp:-1,note:'Bekçiyi yıktın ama yara aldın. (-1 can)'},{t:'Halatla ayağını dola',to:'hazine',req:'halat',note:'Bekçi devrildi, içeri süzüldün.'},{t:'Konuş: hazineyi köyle paylaşmayı öner',to:'hazine',note:'Bekçi sözünü dinleyip yana çekildi.'},{t:'Kaç!',to:'kotu2'}]},
+hazine:{e:'💰',t:'Önünde ağzına kadar altın dolu bir sandık parlıyor. Hazineye ulaştın! Son kararın:',c:[{t:'Hepsini al, köyü unut',to:'kotu1'},{t:'Yarısını köye götür',to:'iyi'}]},
+iyi:{e:'🏆',end:'iyi',t:'İYİ SON: Altınların yarısıyla köye döndün. Okullar, tekneler, sıcak yuvalar yapıldı. Adın liman kasabasında bir efsane oldu. Hazineye ulaştın ve doğru kararı verdin!'},
+kotu1:{e:'🌋',end:'kotu',t:'KÖTÜ SON: Altınları doldurup koşarken açgözlülüğün mağarayı sarstı. Tavan çöktü; hazine de sen de taşların altında kaldın.'},
+kotu2:{e:'🌫️',end:'kotu',t:'KÖTÜ SON: Kaçarken yolunu kaybettin. Karanlık koridorlarda dolaşıp durdun; hazineye hiç ulaşamadın.'},
+olum:{e:'💀',end:'kotu',t:'KÖTÜ SON: Gücün tükendi ve yere yığıldın. Hazine, adanın sırrı olarak kaldı.'}
+};
+let hp,inv,note,cs;
+const $=id=>document.getElementById(id);
+function reset(){hp=3;inv=[];note='';go('start')}
+function go(id){const s=SC[id];$('top').innerHTML='<span>'+'❤️'.repeat(Math.max(0,hp))+'🖤'.repeat(Math.max(0,3-hp))+'</span><span>'+(inv.map(i=>IC[i]).join(' ')||'—')+'</span>';
+ let h='<div id="em">'+s.e+'</div>'+(note?'<div id="nt">'+note+'</div>':'')+'<p>'+s.t+'</p>';
+ if(s.end){h+='<h1>'+(s.end=='iyi'?'🎉 KAZANDIN':'KAYBETTİN')+'</h1><button class="'+(s.end=='iyi'?'good':'bad')+'" onclick="reset()">↺ Yeniden oyna</button>';$('card').innerHTML=h;$('card').style.animation='none';void $('card').offsetWidth;$('card').style.animation='';return}
+ cs=s.c.filter(c=>!c.req||inv.includes(c.req));if(s.sh)cs=cs.slice().sort(()=>Math.random()-.5);
+ h+=cs.map((c,i)=>'<button onclick="pick('+i+')">'+c.t+'</button>').join('');
+ $('card').innerHTML=h;$('card').style.animation='none';void $('card').offsetWidth;$('card').style.animation='';scrollTo(0,0)}
+function pick(i){const c=cs[i];note=c.note||'';if(c.hp)hp+=c.hp;if(c.give&&!inv.includes(c.give))inv.push(c.give);go(hp<=0?'olum':c.to)}
+reset();
+</script><script>if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{})</script></body></html>
